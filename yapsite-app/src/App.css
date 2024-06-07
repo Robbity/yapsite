@@ -1,0 +1,75 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden;
+  background: transparent;
+}
+
+.App {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+}
+
+.centerText {
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+  padding: 10vh 10vw; /* Adjust the padding as needed to give more space around the text */
+  background: transparent; /* Remove background color */
+}
+
+.yapyap {
+  font-size: 10vw; /* Use viewport width for responsive font size */
+  font-weight: bold;
+  color: #333333;
+}
+
+.subtext {
+  font-size: 2vw; /* Use viewport width for responsive font size */
+  margin-top: 2vh; /* Use viewport height for consistent spacing */
+  color: #666666;
+}
+
+.scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .yapyap {
+    font-size: 15vw; /* Increase font size for smaller screens */
+  }
+
+  .subtext {
+    font-size: 4vw; /* Increase font size for smaller screens */
+  }
+
+  .centerText {
+    padding: 5vh 5vw; /* Reduce padding for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .yapyap {
+    font-size: 20vw; /* Further increase font size for very small screens */
+  }
+
+  .subtext {
+    font-size: 5vw; /* Further increase font size for very small screens */
+  }
+
+  .centerText {
+    padding: 5vh 2vw; /* Further reduce padding for very small screens */
+  }
+}
