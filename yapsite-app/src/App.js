@@ -36,9 +36,12 @@ function App() {
       },
     });
 
-    // Place the ground body just off-screen at the bottom
+    // Create the borders: floor, left wall, and right wall
     const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true });
-    World.add(engineInstance.world, ground);
+    const leftWall = Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
+    const rightWall = Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
+
+    World.add(engineInstance.world, [ground, leftWall, rightWall]);
 
     const size = 100;
 
