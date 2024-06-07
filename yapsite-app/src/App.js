@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './App.css';
-import { Engine, Render, World, Bodies } from 'matter-js';
+import { Engine, Render, World, Bodies, Composite } from 'matter-js';
 import Angry from './assets/SVG/Angry.svg';
 import Happy from './assets/SVG/Happy.svg';
 import Neutral from './assets/SVG/Neutral.svg';
@@ -20,6 +20,7 @@ function getRandomRotation() {
 function App() {
   const sceneRef = useRef(null);
   const engine = useRef(Engine.create());
+  const walls = useRef([]);
 
   useEffect(() => {
     const { current: scene } = sceneRef;
@@ -36,12 +37,17 @@ function App() {
       },
     });
 
-    // Create the borders: floor, left wall, and right wall
-    const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true });
-    const leftWall = Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
-    const rightWall = Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
+    const createWalls = () => {
+      const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 25, window.innerWidth, 50, { isStatic: true });
+      const leftWall = Bodies.rectangle(-25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
+      const rightWall = Bodies.rectangle(window.innerWidth + 25, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true });
 
-    World.add(engineInstance.world, [ground, leftWall, rightWall]);
+      return [ground, leftWall, rightWall];
+    };
+
+    // Create initial walls
+    walls.current = createWalls();
+    World.add(engineInstance.world, walls.current);
 
     const size = 100;
 
@@ -74,7 +80,23 @@ function App() {
     Engine.run(engineInstance);
     Render.run(render);
 
+    const handleResize = () => {
+      // Remove old walls
+      Composite.remove(engineInstance.world, walls.current);
+
+      // Create new walls
+      walls.current = createWalls();
+      World.add(engineInstance.world, walls.current);
+
+      // Resize the render canvas
+      render.canvas.width = window.innerWidth;
+      render.canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
+      window.removeEventListener('resize', handleResize);
       Render.stop(render);
       World.clear(engineInstance.world);
       Engine.clear(engineInstance);
